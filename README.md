@@ -1,40 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Profile Creator - Next.js Project
 
-## Getting Started
+This project allows users to create their profiles by submitting a form with various fields. The form includes validation for password strength, email format, and missing fields. This application is built using Next.js.
 
-First, run the development server:
+## Project Overview
 
-```bash
+The Profile Creator project aims to provide a single form for users to input their profile details and validate the password based on the specified policies. The application will display user-friendly error messages when the form fails validation. No backend integration is required, focusing on client-side validation and form handling.
+
+## Functional Requirements
+
+### 1. Form Fields
+
+The form includes the following input fields:
+
+- **Name**: (Required, String)
+- **Email**: (Required, Must be a valid email address format)
+- **Phone**: (Optional, Numeric)
+- **Password**: (Required, String, Must meet password policy)
+
+### 2. Password Policy Validation
+
+The password must meet the following requirements:
+
+- Must be at least 8 characters long.
+- Must contain at least one uppercase letter (A-Z).
+- Must contain at least one lowercase letter (a-z).
+- Must include at least one numeric digit (0-9).
+- Must include at least one special character (e.g., @, #, $, %, etc.).
+
+### 3. Validation and Error Messages
+
+- If any required field is empty (excluding Phone), an error message will display, specifying the missing field.
+- If the password does not meet the policy requirements, an error message will list the violated policies.
+- If the email format is invalid, an error message will be displayed.
+
+### 4. Form Submission
+
+- On successful validation, the form will display a confirmation message: "Profile successfully created!"
+- Note: No backend integration is required for this project; it focuses on client-side validation and form handling.
+
+---
+
+## Installation Instructions
+
+1. **Clone the Repository:**
+
+   Clone the repository to your local machine using the following command:
+
+   ```bash
+   git clone <repository-url>
+
+2. **Install Dependencies:**
+
+npm install
+# or
+yarn install
+# or
+pnpm install
+
+
+3. **Run the Development Server:**
+
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
+
+Open http://localhost:3000 in your browser to see the application in action.
+
+## Unit Testing
+
+The project includes unit tests using Jest and React Testing Library to ensure that the form and password validation work as expected.
+
+Running Tests
+To run the tests, use the following command:
+
+npx jest --watch
 # or
-bun dev
-```
+npx jest 
+# or
+npm run test
+# or
+yarn test
+# or
+pnpm test
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Project Structure
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+profile-creator/
+├── src/                  # Source code directory
+│   ├── pages/            # Pages directory (e.g., Home Page with Profile Creation Form)
+│   │   └── index.tsx     # Home page with the profile creation form
+│   ├── components/       # Reusable React components (e.g., Input Fields)
+│   │   └── FormInput.tsx # Reusable form input component
+│   ├── styles/           # Styles directory
+│   │   └── globals.css   # Tailwind CSS configuration and global styles
+│   ├── utils/            # Utility functions (e.g., Validation Logic)
+│   │   └── validation.ts # Password validation logic
+├── __tests__/            # Unit tests for form validation
+│   └── FormValidation.test.ts # Unit tests for form and password validation

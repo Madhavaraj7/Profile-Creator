@@ -1,114 +1,140 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { JSX, useState } from "react";
+import FormInput from "@/components/FormInput";
+import validatePassword from "@/utils/validation";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+}
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+interface Errors {
+  name?: string;
+  email?: string;
+  phone?: string;
+  password?: string[];
+}
 
-export default function Home() {
+function Home(): JSX.Element {
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState<Errors>({});
+  const [success, setSuccess] = useState<boolean>(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const validate = (): boolean => {
+    const newErrors: Errors = {};
+    if (!formData.name) newErrors.name = "Name is required.";
+    if (!formData.email) newErrors.email = "Email is required.";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Invalid email format.";
+
+    if (!formData.password) {
+      newErrors.password = ["Password is required."];
+    } else {
+      const passwordErrors = validatePassword(formData.password);
+      if (passwordErrors.length > 0) newErrors.password = passwordErrors;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (validate()) {
+      setSuccess(true);
+      setFormData({ name: "", email: "", phone: "", password: "" });
+      setErrors({});
+      toast.success("Profile successfully created!");
+    } else {
+      setSuccess(false);
+    }
+  };
+
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-200">
+      <div className="bg-white p-8 rounded-lg shadow-2xl w-full max-w-md">
+        <h1 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
+          Create Your Profile
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <FormInput
+            label="Name"
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            error={errors.name}
+          />
+          <FormInput
+            label="Email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            error={errors.email}
+          />
+          <FormInput
+            label="Phone"
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            error={errors.phone}
+            isOptional={true}
+          />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <FormInput
+            label="Password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            error={errors.password} 
+          />
+
+          <button
+            type="submit"
+            className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-md focus:ring-2 focus:ring-blue-300 focus:outline-none"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
+
+function App() {
+  return (
+    <>
+      <Home />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick={true}
+        pauseOnHover={true}
+        draggable={false}
+        rtl={false}
+      />
+    </>
+  );
+}
+
+export default App;
