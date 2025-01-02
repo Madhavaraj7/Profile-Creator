@@ -49,6 +49,16 @@ The password must meet the following requirements:
    ```bash
    git clone <repository-url>
 
+
+## Installation Instructions
+
+1. **Clone the Repository:**
+
+   Clone the repository to your local machine using the following command:
+
+   ```bash
+   git clone <repository-url>
+
 2. **Install Dependencies:**
 
 npm install
@@ -86,18 +96,3 @@ yarn test
 pnpm test
 
 
-
-## Project Structure
-
-profile-creator/
-├── src/                  # Source code directory
-│   ├── pages/            # Pages directory (e.g., Home Page with Profile Creation Form)
-│   │   └── index.tsx     # Home page with the profile creation form
-│   ├── components/       # Reusable React components (e.g., Input Fields)
-│   │   └── FormInput.tsx # Reusable form input component
-│   ├── styles/           # Styles directory
-│   │   └── globals.css   # Tailwind CSS configuration and global styles
-│   ├── utils/            # Utility functions (e.g., Validation Logic)
-│   │   └── validation.ts # Password validation logic
-├── __tests__/            # Unit tests for form validation
-│   └── FormValidation.test.ts # Unit tests for form and password validation
